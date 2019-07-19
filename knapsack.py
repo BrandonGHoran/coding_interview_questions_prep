@@ -21,5 +21,19 @@ def knapsack(ws, vs, c):
   
     return knapsack[n][c] 
 
+#this version is slightly cleaner
+def k2(ws, vs, c):
+    n=len(ws)
+    k=np.zeros(shape=(n,c+1))
+
+    for i in range(0, n):#for each item
+        for w in range(1, c+1):#for each total weight possible in the bag
+            if w < ws[i]:#if this item can't be added to the bag
+                k[i][w] = k[i-1][w]#the best we can do is as good as we could do for this weight without this item
+            else:#we can include this item
+                #the best we can do is the maximum of either including this item or not
+                k[i][w] = max(vs[i]+k[i-1][w-ws[i]],k[i-1][w])#the best is either the value of this item plus the best we could do with one less item and weight - weight of current item OR just not choosing this item
+
+    return k[n-1][c]
 
 
